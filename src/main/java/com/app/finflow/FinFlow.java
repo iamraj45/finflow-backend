@@ -1,13 +1,13 @@
-package com.app.expense_tracker;
+package com.app.finflow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ExpenseTrackerApplication {
+public class FinFlow {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ExpenseTrackerApplication.class, args);
+		SpringApplication.run(FinFlow.class, args);
 	}
 
 }

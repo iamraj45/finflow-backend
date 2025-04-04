@@ -1,10 +1,10 @@
-package com.app.expense_tracker;
+package com.app.finflow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ExpenseTrackerApplicationTests {
+class FinFlowTests {
 
 	@Test
 	void contextLoads() {
