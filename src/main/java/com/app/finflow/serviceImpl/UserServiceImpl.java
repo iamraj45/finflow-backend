@@ -1,8 +1,6 @@
 package com.app.finflow.serviceImpl;
 
-import com.app.finflow.dto.ExpensesDto;
 import com.app.finflow.dto.UserDto;
-import com.app.finflow.model.Expenses;
 import com.app.finflow.model.User;
 import com.app.finflow.repository.UserRepository;
 import com.app.finflow.service.UserService;

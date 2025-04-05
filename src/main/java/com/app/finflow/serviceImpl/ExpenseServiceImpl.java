@@ -1,23 +1,23 @@
 package com.app.finflow.serviceImpl;
 
-import com.app.finflow.dto.ExpensesDto;
+import com.app.finflow.dto.ExpenseDto;
 import com.app.finflow.model.Category;
-import com.app.finflow.model.Expenses;
+import com.app.finflow.model.Expense;
 import com.app.finflow.model.User;
 import com.app.finflow.repository.CategoryRepository;
-import com.app.finflow.repository.ExpensesRepository;
+import com.app.finflow.repository.ExpenseRepository;
 import com.app.finflow.repository.UserRepository;
-import com.app.finflow.service.ExpensesService;
+import com.app.finflow.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ExpensesServiceImpl implements ExpensesService {
+public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
-    ExpensesRepository expensesRepository;
+    ExpenseRepository expenseRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -26,24 +26,24 @@ public class ExpensesServiceImpl implements ExpensesService {
     CategoryRepository categoryRepository;
 
     @Override
-    public Expenses addExpense(ExpensesDto request) {
+    public Expense addExpense(ExpenseDto request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        Expenses expense = new Expenses();
+        Expense expense = new Expense();
         expense.setUser(user);
         expense.setCategory(category);
         expense.setAmount(request.getAmount());
         expense.setDescription(request.getDescription());
 
-        return expensesRepository.save(expense);
+        return expenseRepository.save(expense);
     }
 
     @Override
-    public List<Expenses> getExpenses(Integer userId) {
-        return expensesRepository.findByUserId(userId);
+    public List<Expense> getExpenses(Integer userId) {
+        return expenseRepository.findByUserId(userId);
     }
 }
