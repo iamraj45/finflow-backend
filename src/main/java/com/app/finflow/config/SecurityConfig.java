@@ -16,7 +16,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/unsecure/**").permitAll() // allow public access
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/unsecure/**").permitAll() // allow public access
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults()); // or use formLogin if preferred
