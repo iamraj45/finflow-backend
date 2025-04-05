@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.app</groupId>
-	<artifactId>fiinflow</artifactId>
+	<artifactId>finflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>finflow</name>
 	<description>FinFlow</description>
