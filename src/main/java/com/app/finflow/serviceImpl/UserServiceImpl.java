@@ -30,10 +30,6 @@ public class UserServiceImpl implements UserService {
 
             userDataResponse.add(userData);
         });
-
-
         return userDataResponse;
-
     }
-
 }
