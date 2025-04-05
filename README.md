@@ -1,1 +1,1 @@
-Expense Tracker - Spring Boot Application
+FinFlow - Spring Boot Application for tracking expenses
