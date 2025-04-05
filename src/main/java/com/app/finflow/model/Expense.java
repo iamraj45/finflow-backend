@@ -1,6 +1,5 @@
 package com.app.finflow.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "expenses")
-public class Expenses {
+public class Expense {
     @Id
     @Column(name = "id")
     private Integer id;
