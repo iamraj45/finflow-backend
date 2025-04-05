@@ -9,5 +9,4 @@ public class FinFlow {
 	public static void main(String[] args) {
 		SpringApplication.run(FinFlow.class, args);
 	}
-
 }
