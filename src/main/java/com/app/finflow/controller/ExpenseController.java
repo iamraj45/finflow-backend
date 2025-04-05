@@ -2,6 +2,7 @@ package com.app.finflow.controller;
 
 import com.app.finflow.dto.ExpenseDto;
 import com.app.finflow.model.Expense;
+import com.app.finflow.model.User;
 import com.app.finflow.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
