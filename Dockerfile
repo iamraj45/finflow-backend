@@ -11,4 +11,4 @@ COPY . .
 RUN ./mvnw clean package -DskipTests
 
 # Run the Spring Boot app
-CMD ["java", "-jar", "target/finflow.jar"]
+CMD ["java", "-jar", "target/finflow-0.0.1-SNAPSHOT.jar"]
