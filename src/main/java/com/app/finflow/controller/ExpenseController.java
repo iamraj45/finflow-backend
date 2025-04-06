@@ -23,7 +23,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/getExpenses")
-    public ResponseEntity<List<Expense>> getExpenses(@RequestParam("userId") Integer userId) {
+    public ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam("userId") Integer userId) {
         return ResponseEntity.ok(expenseService.getExpenses(userId));
     }
 }

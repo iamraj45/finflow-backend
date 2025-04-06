@@ -43,7 +43,18 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<Expense> getExpenses(Integer userId) {
-        return expenseRepository.findAllByUserId(userId);
+    public List<ExpenseDto> getExpenses(Integer userId) {
+        List<Expense> expenses = expenseRepository.findAllByUserId(userId);
+
+        return expenses.stream()
+                .map(e -> new ExpenseDto(
+                        e.getId(),
+                        e.getUser().getId(),
+                        e.getAmount(),
+                        e.getDescription(),
+                        e.getDate(),
+                        e.getCategory() != null ? e.getCategory().getId() : null
+                ))
+                .toList();
     }
 }
