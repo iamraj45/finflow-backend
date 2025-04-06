@@ -12,4 +12,13 @@ public class ExpenseDto {
     private Double amount;
     private String description;
     private LocalDateTime date;
+
+    public ExpenseDto(Integer id, Integer userId, Double amount, String description, LocalDateTime date, Integer categoryId) {
+        this.id = id;
+        this.userId = userId;
+        this.amount = amount;
+        this.description = description;
+        this.date = date;
+        this.categoryId = categoryId;
+    }
 }
