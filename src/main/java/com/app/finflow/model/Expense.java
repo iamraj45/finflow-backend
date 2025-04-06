@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name = "expenses")
 public class Expense {
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -25,7 +25,6 @@ public class Expense {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-//    @JsonBackReference
     private User user;
 
     @ManyToOne
