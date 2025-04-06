@@ -1,6 +1,7 @@
 package com.app.finflow.serviceImpl;
 
 import com.app.finflow.dto.ExpenseDto;
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.model.Category;
 import com.app.finflow.model.Expense;
 import com.app.finflow.model.User;
@@ -26,20 +27,30 @@ public class ExpenseServiceImpl implements ExpenseService {
     CategoryRepository categoryRepository;
 
     @Override
-    public Expense addExpense(ExpenseDto request) {
+    public GeneralDto addExpense(ExpenseDto request) {
+
+        GeneralDto response = new GeneralDto();
+        response.setStatus(true);
+
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        Expense expense = new Expense();
-        expense.setUser(user);
-        expense.setCategory(category);
-        expense.setAmount(request.getAmount());
-        expense.setDescription(request.getDescription());
-
-        return expenseRepository.save(expense);
+        try {
+            Expense expense = new Expense();
+            expense.setUser(user);
+            expense.setCategory(category);
+            expense.setAmount(request.getAmount());
+            expense.setDescription(request.getDescription());
+            expense.setDate(request.getDate());
+            expenseRepository.save(expense);
+        } catch (Exception e) {
+            response.setStatus(false);
+            throw new RuntimeException("Error while adding expense: " + e.getMessage());
+        }
+        return response;
     }
 
     @Override

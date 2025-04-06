@@ -1,6 +1,7 @@
 package com.app.finflow.controller;
 
 import com.app.finflow.dto.ExpenseDto;
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.model.Expense;
 import com.app.finflow.model.User;
 import com.app.finflow.service.ExpenseService;
@@ -18,7 +19,7 @@ public class ExpenseController {
     ExpenseService expenseService;
 
     @PostMapping("/addExpense")
-    public ResponseEntity<Expense> addExpense(@RequestBody ExpenseDto request) {
+    public ResponseEntity<GeneralDto> addExpense(@RequestBody ExpenseDto request) {
         return ResponseEntity.ok(expenseService.addExpense(request));
     }
 
