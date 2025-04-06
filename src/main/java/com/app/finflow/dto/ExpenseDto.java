@@ -11,9 +11,9 @@ public class ExpenseDto {
     private Integer categoryId;
     private Double amount;
     private String description;
-    private LocalDateTime date;
+    private Long date;
 
-    public ExpenseDto(Integer id, Integer userId, Double amount, String description, LocalDateTime date, Integer categoryId) {
+    public ExpenseDto(Integer id, Integer userId, Double amount, String description, Long date, Integer categoryId) {
         this.id = id;
         this.userId = userId;
         this.amount = amount;

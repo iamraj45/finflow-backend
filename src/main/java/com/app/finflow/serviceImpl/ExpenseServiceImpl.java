@@ -12,6 +12,9 @@ import com.app.finflow.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -44,7 +47,10 @@ public class ExpenseServiceImpl implements ExpenseService {
             expense.setCategory(category);
             expense.setAmount(request.getAmount());
             expense.setDescription(request.getDescription());
-            expense.setDate(request.getDate());
+            LocalDateTime date = Instant.ofEpochMilli(request.getDate())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            expense.setDate(date);
             expenseRepository.save(expense);
         } catch (Exception e) {
             response.setStatus(false);
@@ -63,7 +69,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                         e.getUser().getId(),
                         e.getAmount(),
                         e.getDescription(),
-                        e.getDate(),
+                        e.getDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
                         e.getCategory() != null ? e.getCategory().getId() : null
                 ))
                 .toList();
