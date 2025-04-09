@@ -7,4 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class GeneralDto {
     private Boolean status;
+    private String message;
 }

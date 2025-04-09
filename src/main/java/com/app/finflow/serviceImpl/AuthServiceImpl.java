@@ -1,6 +1,7 @@
 package com.app.finflow.serviceImpl;
 
 import com.app.finflow.dto.AuthResponse;
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.dto.LoginRequest;
 import com.app.finflow.dto.RegisterRequest;
 import com.app.finflow.model.User;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.management.RuntimeErrorException;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -30,15 +33,31 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
 
     @Override
-    public AuthResponse register(RegisterRequest request) {
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
+    public GeneralDto register(RegisterRequest request) {
+        GeneralDto generalDto = new GeneralDto();
 
-        String token = jwtUtil.generateToken(user.getEmail());
-        return new AuthResponse(token);
+        if(null != request){
+            User existingUser = userRepository.getUserByEmail(request.getEmail());
+            if(null != existingUser){
+                generalDto.setStatus(false);
+                generalDto.setMessage("This email is already registered. Please register with a different email.");
+                return generalDto;
+            }
+        }
+
+        try {
+            User user = new User();
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+            generalDto.setStatus(true);
+            generalDto.setMessage("User registered successfully");
+        } catch (Exception e) {
+            generalDto.setStatus(false);
+            generalDto.setMessage("Error during user registration");
+        }
+        return generalDto;
     }
 
     @Override
@@ -46,7 +65,6 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-
         String token = jwtUtil.generateToken(request.getEmail());
         return new AuthResponse(token);
     }
