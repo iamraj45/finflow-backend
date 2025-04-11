@@ -15,8 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.RuntimeErrorException;
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -40,11 +38,10 @@ public class AuthServiceImpl implements AuthService {
             User existingUser = userRepository.getUserByEmail(request.getEmail());
             if(null != existingUser){
                 generalDto.setStatus(false);
-                generalDto.setMessage("This email is already registered. Please register with a different email.");
+                generalDto.setMessage("This email is already registered. Please try logging in or use a different email.");
                 return generalDto;
             }
         }
-
         try {
             User user = new User();
             user.setName(request.getName());
@@ -65,7 +62,8 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        String token = jwtUtil.generateToken(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        String token = jwtUtil.generateToken(user);
         return new AuthResponse(token);
     }
 }
