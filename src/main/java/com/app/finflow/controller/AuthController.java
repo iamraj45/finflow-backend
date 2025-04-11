@@ -1,6 +1,7 @@
 package com.app.finflow.controller;
 
 import com.app.finflow.dto.AuthResponse;
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.dto.LoginRequest;
 import com.app.finflow.dto.RegisterRequest;
 import com.app.finflow.service.AuthService;
@@ -16,7 +17,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody RegisterRequest request) {
+    public GeneralDto register(@RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 
