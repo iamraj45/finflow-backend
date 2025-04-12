@@ -11,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
-    @Query("SELECT e FROM Expense e WHERE e.user.id = :userId")
+    @Query("SELECT e FROM Expense e WHERE e.user.id = :userId AND e.deleted = false")
     List<Expense> findAllByUserId(@Param("userId") Integer userId);
+
+    @Query("SELECT e FROM Expense e WHERE e.id IN (:expenseIds) AND e.deleted = false")
+    List<Expense> getExpenseById(@Param("expenseIds") List<Integer> expenseId);
 }

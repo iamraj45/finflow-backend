@@ -30,4 +30,6 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    private Boolean deleted;
 }
