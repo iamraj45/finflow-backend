@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/unsecure/expenses")
+@RequestMapping("/api/expenses")
 public class ExpenseController {
 
     @Autowired

@@ -16,7 +16,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/unsecure/getUserData")
+    @GetMapping("/getUserData")
     List<UserDto> getUserData(){
         return userService.getUserData();
     }
