@@ -46,6 +46,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             expense.setUser(user);
             expense.setCategory(category);
             expense.setAmount(request.getAmount());
+            expense.setDeleted(false);
             expense.setDescription(request.getDescription());
             LocalDateTime date = Instant.ofEpochMilli(request.getDate())
                     .atZone(ZoneId.systemDefault())
@@ -73,5 +74,27 @@ public class ExpenseServiceImpl implements ExpenseService {
                         e.getCategory() != null ? e.getCategory().getId() : null
                 ))
                 .toList();
+    }
+
+    @Override
+    public GeneralDto deleteExpense(List<Integer> expenseIds) {
+        GeneralDto response = new GeneralDto();
+        response.setStatus(true);
+        response.setMessage("Expense deleted successfully");
+
+        try{
+            List<Expense> expenseData = expenseRepository.getExpenseById(expenseIds);
+            if(null != expenseData && !expenseData.isEmpty()) {
+                expenseData.forEach(dto -> {
+                    dto.setDeleted(true);
+                    expenseRepository.saveAndFlush(dto);
+                });
+            }
+        } catch (Exception e) {
+            response.setStatus(false);
+            response.setMessage("Error deleting expense");
+        }
+
+        return response;
     }
 }

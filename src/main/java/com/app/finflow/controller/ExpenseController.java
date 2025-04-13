@@ -27,4 +27,9 @@ public class ExpenseController {
     public ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam("userId") Integer userId) {
         return ResponseEntity.ok(expenseService.getExpenses(userId));
     }
+
+    @PostMapping("/deleteExpense")
+    public ResponseEntity<GeneralDto> deleteExpense(@RequestParam("expenseId") List<Integer> expenseId) {
+        return ResponseEntity.ok(expenseService.deleteExpense(expenseId));
+    }
 }
