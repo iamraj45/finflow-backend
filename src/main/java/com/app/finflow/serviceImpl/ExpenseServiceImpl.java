@@ -107,9 +107,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         try {
             Expense expense = expenseRepository.findById(request.getId())
                     .orElseThrow(() -> new RuntimeException("Expense not found"));
-
+            Optional<Category> cat = categoryRepository.findById(request.getCategoryId());
             expense.setAmount(request.getAmount());
             expense.setDescription(request.getDescription());
+            cat.ifPresent(expense::setCategory);
             LocalDateTime date = Instant.ofEpochMilli(request.getDate())
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime();
