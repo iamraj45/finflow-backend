@@ -32,4 +32,9 @@ public class ExpenseController {
     public ResponseEntity<GeneralDto> deleteExpense(@RequestParam("expenseId") List<Integer> expenseId) {
         return ResponseEntity.ok(expenseService.deleteExpense(expenseId));
     }
+
+    @PostMapping("/updateExpense")
+    public ResponseEntity<GeneralDto> updateExpense(@RequestBody ExpenseDto request) {
+        return ResponseEntity.ok(expenseService.updateExpense(request));
+    }
 }

@@ -97,4 +97,28 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return response;
     }
+
+    @Override
+    public GeneralDto updateExpense(ExpenseDto request) {
+        GeneralDto response = new GeneralDto();
+        response.setStatus(true);
+        response.setMessage("Expense updated successfully");
+
+        try {
+            Expense expense = expenseRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+            expense.setAmount(request.getAmount());
+            expense.setDescription(request.getDescription());
+            LocalDateTime date = Instant.ofEpochMilli(request.getDate())
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+            expense.setDate(date);
+            expenseRepository.saveAndFlush(expense);
+        } catch (Exception e) {
+            response.setStatus(false);
+            response.setMessage("Error updating expense");
+        }
+        return response;
+    }
 }

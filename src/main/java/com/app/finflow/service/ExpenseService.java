@@ -12,4 +12,6 @@ public interface ExpenseService {
     List<ExpenseDto> getExpenses(Integer userId);
 
     GeneralDto deleteExpense(List<Integer> expenseId);
+
+    GeneralDto updateExpense(ExpenseDto request);
 }
