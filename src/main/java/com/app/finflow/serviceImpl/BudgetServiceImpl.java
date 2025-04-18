@@ -62,7 +62,7 @@ public class BudgetServiceImpl implements BudgetService {
             if (existing != null) {
                 // Update existing budget
                 existing.setBudget(dto.getBudget());
-                budgetRepository.save(existing);
+                budgetRepository.saveAndFlush(existing);
             } else {
                 // Insert new budget
                 CategoryBudget newBudget = new CategoryBudget();
@@ -76,5 +76,25 @@ public class BudgetServiceImpl implements BudgetService {
         response.setStatus(true);
         response.setMessage("Budget set successfully");
         return response;
+    }
+
+    @Override
+    public void deleteCategoryBudget(Integer userId, Integer categoryId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+        if (category == null) {
+            throw new IllegalArgumentException("Category not found");
+        }
+
+        CategoryBudget existing = budgetRepository.findByUserAndCategory(user, category);
+        if (existing != null) {
+            budgetRepository.delete(existing);
+        } else {
+            throw new IllegalArgumentException("CategoryBudget not found for the given user and category");
+        }
     }
 }

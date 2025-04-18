@@ -9,4 +9,6 @@ public interface BudgetService {
     List<CategoryBudgetDto> getCategoryBudget(Integer userId);
 
     GeneralDto addCategoryBudget(Integer userId, List<CategoryBudgetDto> dto);
+
+    void deleteCategoryBudget(Integer userId, Integer categoryId);
 }

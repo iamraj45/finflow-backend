@@ -27,4 +27,9 @@ public class BudgetController {
     GeneralDto setCategoryBudget(@RequestParam("userId") Integer userId, @RequestBody List<CategoryBudgetDto> dto) {
         return budgetService.addCategoryBudget(userId, dto);
     }
+
+    @DeleteMapping("/deleteCategoryBudget")
+    public void deleteCategoryBudget(@RequestParam("userId") Integer userId, @RequestParam("categoryId") Integer categoryId) {
+        budgetService.deleteCategoryBudget(userId, categoryId);
+    }
 }
