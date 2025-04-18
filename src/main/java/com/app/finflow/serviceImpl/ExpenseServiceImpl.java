@@ -62,8 +62,25 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<ExpenseDto> getExpenses(Integer userId) {
-        List<Expense> expenses = expenseRepository.findAllByUserId(userId);
+    public List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate) {
+
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("Start date and end date must be provided");
+        }
+
+        if (startDate > endDate) {
+            throw new IllegalArgumentException("Start date must be less than end date");
+        }
+
+        LocalDateTime startDateTime = Instant.ofEpochMilli(startDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        LocalDateTime endDateTime = Instant.ofEpochMilli(endDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        List<Expense> expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDate(userId, startDateTime, endDateTime);
 
         return expenses.stream()
                 .map(e -> new ExpenseDto(

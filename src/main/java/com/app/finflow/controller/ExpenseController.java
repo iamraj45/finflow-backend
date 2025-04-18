@@ -24,8 +24,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/getExpenses")
-    public ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam("userId") Integer userId) {
-        return ResponseEntity.ok(expenseService.getExpenses(userId));
+    public ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam("userId") Integer userId, @RequestParam Long startDate, @RequestParam Long endDate) {
+        return ResponseEntity.ok(expenseService.getExpenses(userId, startDate, endDate));
     }
 
     @PostMapping("/deleteExpense")

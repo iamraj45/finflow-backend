@@ -9,7 +9,7 @@ public interface ExpenseService {
 
     GeneralDto addExpense(ExpenseDto request);
 
-    List<ExpenseDto> getExpenses(Integer userId);
+    List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate);
 
     GeneralDto deleteExpense(List<Integer> expenseId);
 
