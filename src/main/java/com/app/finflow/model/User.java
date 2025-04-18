@@ -25,4 +25,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Expense> expense;
+
+    private Double totalBudget;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CategoryBudget> categoryBudgets;
 }
