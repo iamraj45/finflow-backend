@@ -44,22 +44,36 @@ public class BudgetServiceImpl implements BudgetService {
     }
 
     @Override
-    public GeneralDto addCategoryBudget(Integer userId, List<CategoryBudgetDto> dto) {
+    public GeneralDto addCategoryBudget(Integer userId, List<CategoryBudgetDto> dtoList) {
         GeneralDto response = new GeneralDto();
-        List<CategoryBudget> budgetList = new ArrayList<>();
 
-        dto.forEach(budgetData -> {
-            CategoryBudget budget = new CategoryBudget();
-            User user = userRepository.findById(userId).orElse(null);
-            Category category = categoryRepository.findById(budgetData.getCategoryId()).orElse(null);
-            budget.setUser(user);
-            budget.setCategory(category);
-            budget.setBudget(budgetData.getBudget());
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            response.setStatus(false);
+            response.setMessage("User not found");
+            return response;
+        }
 
-            budgetList.add(budget);
-        });
+        for (CategoryBudgetDto dto : dtoList) {
+            Category category = categoryRepository.findById(dto.getCategoryId()).orElse(null);
+            if (category == null) continue;
 
-        budgetRepository.saveAll(budgetList);
+            CategoryBudget existing = budgetRepository.findByUserAndCategory(user, category);
+            if (existing != null) {
+                // Update existing budget
+                existing.setBudget(dto.getBudget());
+                budgetRepository.save(existing);
+            } else {
+                // Insert new budget
+                CategoryBudget newBudget = new CategoryBudget();
+                newBudget.setUser(user);
+                newBudget.setCategory(category);
+                newBudget.setBudget(dto.getBudget());
+                budgetRepository.save(newBudget);
+            }
+        }
+
+        response.setStatus(true);
         response.setMessage("Budget set successfully");
         return response;
     }
