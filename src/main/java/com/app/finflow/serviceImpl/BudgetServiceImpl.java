@@ -35,6 +35,7 @@ public class BudgetServiceImpl implements BudgetService {
         budgetList.forEach(dto -> {
             CategoryBudgetDto budgetData = new CategoryBudgetDto();
             budgetData.setCategoryId(dto.getCategory().getId());
+            budgetData.setCatergoryName(dto.getCategory().getName());
             budgetData.setBudget(dto.getBudget());
 
             response.add(budgetData);
