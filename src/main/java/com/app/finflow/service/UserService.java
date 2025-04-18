@@ -1,6 +1,7 @@
 package com.app.finflow.service;
 
 
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.dto.UserDto;
 
 import java.util.List;
@@ -8,5 +9,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDto> getUserData();
+    UserDto getUserData(Integer userId);
+
+    GeneralDto setUserData(UserDto request);
 }
