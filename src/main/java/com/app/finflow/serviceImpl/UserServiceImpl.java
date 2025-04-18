@@ -1,5 +1,6 @@
 package com.app.finflow.serviceImpl;
 
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.dto.UserDto;
 import com.app.finflow.model.User;
 import com.app.finflow.repository.UserRepository;
@@ -29,5 +30,26 @@ public class UserServiceImpl implements UserService {
             userData.setTotalBudget(userDetail.get().getTotalBudget());
         }
         return userData;
+    }
+
+    @Override
+    public GeneralDto setUserData(UserDto request) {
+        GeneralDto response = new GeneralDto();
+        response.setStatus(true);
+        response.setMessage("User data updated successfully");
+        try {
+            Optional<User> user = userRepository.findById(request.getId());
+            if (user.isPresent()) {
+                User userDetail = user.get();
+                userDetail.setName(request.getName());
+                userDetail.setEmail(request.getEmail());
+                userDetail.setTotalBudget(request.getTotalBudget());
+                userRepository.save(userDetail);
+            }
+        } catch (Exception e){
+            response.setStatus(false);
+            response.setMessage("Error changing user details" + e.getMessage());
+        }
+        return response;
     }
 }

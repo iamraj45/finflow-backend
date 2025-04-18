@@ -1,12 +1,10 @@
 package com.app.finflow.controller;
 
+import com.app.finflow.dto.GeneralDto;
 import com.app.finflow.dto.UserDto;
 import com.app.finflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +18,10 @@ public class UserController {
     @GetMapping("/getUserData")
     UserDto getUserData(@RequestParam("userId") Integer userId) {
         return userService.getUserData(userId);
+    }
+
+    @PostMapping("/updateUserData")
+    GeneralDto setUserData(@RequestBody UserDto request) {
+        return userService.setUserData(request);
     }
 }
