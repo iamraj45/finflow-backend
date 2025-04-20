@@ -10,11 +10,15 @@ import com.app.finflow.repository.ExpenseRepository;
 import com.app.finflow.repository.UserRepository;
 import com.app.finflow.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +66,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate) {
+    public List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate, Integer categoryId, Integer pageNo, Integer pageSize) throws IllegalArgumentException {
 
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("Start date and end date must be provided");
@@ -80,7 +84,22 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime();
 
-        List<Expense> expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDate(userId, startDateTime, endDateTime);
+        Pageable pageable = null;
+        if(null != pageNo && null != pageSize) {
+            pageable = PageRequest.of(pageNo, pageSize);
+        }
+
+        Page<Expense> expensePage = null;
+        List<Expense> expenses = new ArrayList<>();
+        if(null != pageable) {
+            expensePage = expenseRepository.findAllByUserIdAndStartDateAndEndDate(userId, startDateTime, endDateTime, categoryId, pageable);
+        }else {
+            expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDateWithoutPagination(userId, startDateTime, endDateTime);
+        }
+
+        if(null != expensePage) {
+            expenses = expensePage.getContent();
+        }
 
         return expenses.stream()
                 .map(e -> new ExpenseDto(
