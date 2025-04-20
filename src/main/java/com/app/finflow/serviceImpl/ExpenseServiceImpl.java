@@ -100,7 +100,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         if(null != expensePage) {
             expenses = expensePage.getContent();
         }
-
+        expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDateWithoutPagination(userId, startDateTime, endDateTime);
         return expenses.stream()
                 .map(e -> new ExpenseDto(
                         e.getId(),
