@@ -86,7 +86,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Pageable pageable = null;
         if(null != pageNo && null != pageSize) {
-            pageable = PageRequest.of(pageNo, pageSize);
+            pageable = PageRequest.of(pageNo - 1, pageSize);
         }
 
         Page<Expense> expensePage = null;
@@ -100,7 +100,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         if(null != expensePage) {
             expenses = expensePage.getContent();
         }
-        expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDateWithoutPagination(userId, startDateTime, endDateTime);
         return expenses.stream()
                 .map(e -> new ExpenseDto(
                         e.getId(),
