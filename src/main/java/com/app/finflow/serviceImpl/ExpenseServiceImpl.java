@@ -91,9 +91,12 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Page<Expense> expensePage = null;
         List<Expense> expenses = new ArrayList<>();
+        Integer pageCount;
         if(null != pageable) {
             expensePage = expenseRepository.findAllByUserIdAndStartDateAndEndDate(userId, startDateTime, endDateTime, categoryId, pageable);
+            pageCount = expensePage.getTotalPages();
         }else {
+            pageCount = 0;
             expenses = expenseRepository.findAllByUserIdAndStartDateAndEndDateWithoutPagination(userId, startDateTime, endDateTime);
         }
 
@@ -107,7 +110,9 @@ public class ExpenseServiceImpl implements ExpenseService {
                         e.getAmount(),
                         e.getDescription(),
                         e.getDate().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli(),
-                        e.getCategory() != null ? e.getCategory().getId() : null
+                        e.getCategory() != null ? e.getCategory().getId() : null,
+                        pageCount
+
                 ))
                 .toList();
     }
