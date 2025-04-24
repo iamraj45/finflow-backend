@@ -49,7 +49,7 @@ public class AuthController {
         return userRepository.findByEmail(email)
                 .map(user -> {
                     String token = jwtUtil.generateResetToken(email);
-                    String resetLink = "http://localhost:5173/reset-password?token=" + token;
+                    String resetLink = "https://finflow-tracker.netlify.app/reset-password?token=" + token;
 
                     mailService.sendResetPasswordEmail(email, resetLink); // ✅
 
