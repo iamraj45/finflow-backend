@@ -5,32 +5,43 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import io.github.cdimascio.dotenv.Dotenv;
 
 @Slf4j
 @Configuration
 public class FirebaseConfig {
 
-    @Value("${firebase.credentials.path}")
-    private Resource firebaseCredentials;
-
     @PostConstruct
     public void initializeFirebase() {
         try {
+            Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+            String firebaseJson = System.getenv("FIREBASE_SERVICE_ACCOUNT");
+            if ((firebaseJson == null || firebaseJson.isEmpty()) && dotenv != null) {
+                firebaseJson = dotenv.get("FIREBASE_SERVICE_ACCOUNT");
+            }
+
+            if (firebaseJson == null || firebaseJson.isEmpty()) {
+                throw new IllegalStateException("Missing FIREBASE_SERVICE_ACCOUNT");
+            }
+
+            InputStream serviceAccount = new ByteArrayInputStream(firebaseJson.getBytes(StandardCharsets.UTF_8));
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(firebaseCredentials.getInputStream()))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
                 log.info("Firebase initialized successfully");
             }
-        } catch (IOException e) {
-            log.error("Failed to initialize Firebase", e);
+
+        } catch (Exception e) {
+            log.error("Firebase initialization failed", e);
         }
     }
 }
