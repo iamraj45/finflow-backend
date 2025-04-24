@@ -6,10 +6,12 @@ import lombok.Data;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.ToString;
 
 @Entity
 @Data
 @Table(name = "users")
+@ToString(exclude = {"expense", "categoryBudgets"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +32,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CategoryBudget> categoryBudgets;
+
+    @Column(name = "login_method")
+    private String loginMethod; // values: "google", "email"
 }
