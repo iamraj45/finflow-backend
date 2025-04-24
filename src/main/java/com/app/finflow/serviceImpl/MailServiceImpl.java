@@ -16,8 +16,7 @@ public class MailServiceImpl implements MailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("Reset your FinFlow password");
-        message.setText("Click the link below to reset your password:\n\n" + resetLink);
-        message.setText("Please do not share this link with anyone.");
+        message.setText("Please do not share this link with anyone. \nClick the link below to reset your password:\n\n" + resetLink);
         mailSender.send(message);
     }
 }
