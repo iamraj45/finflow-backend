@@ -56,4 +56,26 @@ public class JwtUtil {
     public boolean validateToken(String token, String username) {
         return (extractUsername(token).equals(username) && !isTokenExpired(token));
     }
+
+    // Reset Token
+    public String generateResetToken(String email) {
+        return Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutes
+                .signWith(key)
+                .compact();
+    }
+
+    public String extractEmail(String token) {
+        return extractUsername(token);
+    }
+
+    public boolean validateResetToken(String token) {
+        try {
+            return !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
