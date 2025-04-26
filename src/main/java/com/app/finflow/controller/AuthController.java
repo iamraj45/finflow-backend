@@ -31,9 +31,6 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @Autowired
-    private MailServiceImpl mailService;
-
     @PostMapping("/register")
     public GeneralDto register(@RequestBody RegisterRequest request) {
         return authService.register(request);
@@ -45,32 +42,18 @@ public class AuthController {
     }
 
     @PostMapping("/request-password-reset")
-    public ResponseEntity<?> requestReset(@RequestParam String email) {
-        return userRepository.findByEmail(email)
-                .map(user -> {
-                    String token = jwtUtil.generateResetToken(email);
-                    String resetLink = "https://finflow-tracker.netlify.app/reset-password?token=" + token;
-
-                    mailService.sendResetPasswordEmail(email, resetLink); // ✅
-
-                    return ResponseEntity.ok("Reset link sent to " + email);
-                })
-                .orElseGet(() -> ResponseEntity.status(404).body("Email not registered"));
+    public ResponseEntity<GeneralDto> requestReset(@RequestParam String email) {
+        return ResponseEntity.ok(authService.requestReset(email));
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        if (!jwtUtil.validateResetToken(token)) {
-            return ResponseEntity.status(400).body("Invalid or expired token");
-        }
-
-        String email = jwtUtil.extractEmail(token);
-        return userRepository.findByEmail(email)
-                .map(user -> {
-                    user.setPassword(passwordEncoder.encode(newPassword));
-                    userRepository.save(user);
-                    return ResponseEntity.ok("Password updated successfully");
-                })
-                .orElseGet(() -> ResponseEntity.status(404).body("User not found"));
+    public ResponseEntity<GeneralDto> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+        return ResponseEntity.ok(authService.resetPassword(token, newPassword));
     }
+
+    @GetMapping("/verifyEmail")
+    public ResponseEntity<GeneralDto> verifyUser(@RequestParam String token) {
+        return ResponseEntity.ok(authService.verifyUser(token));
+    }
+
 }

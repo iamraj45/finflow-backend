@@ -3,6 +3,7 @@ package com.app.finflow.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -35,4 +36,8 @@ public class User {
 
     @Column(name = "login_method")
     private String loginMethod; // values: "google", "email"
+
+    private boolean verified;
+    private String verificationToken;
+    private LocalDateTime tokenExpiry;
 }

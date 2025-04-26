@@ -19,4 +19,12 @@ public class MailServiceImpl implements MailService {
         message.setText("Please do not share this link with anyone. \nClick the link below to reset your password:\n\n" + resetLink);
         mailSender.send(message);
     }
+
+    public void sendVerificationEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
 }
