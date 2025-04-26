@@ -70,10 +70,10 @@ public class AuthServiceImpl implements AuthService {
             user.setVerified(false);
             userRepository.save(user);
 
-//            http://localhost:8080
+//            http://localhost:5173
 //            https://finflow-backend-g9mo.onrender.com
 
-            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verifyEmail?token=" + token;
+            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verify-email?token=" + token;
             mailService.sendVerificationEmail(user.getEmail(), verificationLink);
 
             generalDto.setStatus(true);
