@@ -66,16 +66,15 @@ public class AuthServiceImpl implements AuthService {
             //For email verification
             String token = UUID.randomUUID().toString();
             user.setVerificationToken(token);
-            user.setTokenExpiry(LocalDateTime.now().plusMinutes(5)); // 30 minutes
+            user.setTokenExpiry(LocalDateTime.now().plusHours(24)); // 24 hours
             user.setVerified(false);
             userRepository.save(user);
 
 //            http://localhost:8080
 //            https://finflow-backend-g9mo.onrender.com
 
-            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verifyEmail?token=" + token;
-            mailService.sendVerificationEmail(user.getEmail(), "Verify Your Account",
-                    "Click the link to verify: " + verificationLink);
+            String verificationLink = "http://localhost:5173/verifyEmail?token=" + token;
+            mailService.sendVerificationEmail(user.getEmail(), verificationLink);
 
             generalDto.setStatus(true);
             generalDto.setMessage("User registered successfully. Please check your email to verify your account.");
@@ -158,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
         // http://localhost:5173
         try {
             String token = jwtUtil.generateResetToken(email);
-            String resetLink = "https://finflow-backend-g9mo.onrender.com/reset-password?token=" + token;
+            String resetLink = "http://localhost:5173/reset-password?token=" + token;
 
             mailService.sendResetPasswordEmail(email, resetLink);
         } catch (Exception e) {
