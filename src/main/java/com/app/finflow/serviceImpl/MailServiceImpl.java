@@ -12,6 +12,8 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import org.thymeleaf.context.Context;
 
+import java.io.UnsupportedEncodingException;
+
 @Service
 public class MailServiceImpl implements MailService {
 
@@ -21,10 +23,11 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
-    public void sendResetPasswordEmail(String toEmail, String resetLink) throws MessagingException {
+    public void sendResetPasswordEmail(String toEmail, String resetLink) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
+        helper.setFrom("noreply.finflow@gmail.com", "FinFlow Support");
         helper.setTo(toEmail);
         helper.setSubject("Reset your FinFlow password");
 
@@ -36,10 +39,11 @@ public class MailServiceImpl implements MailService {
         mailSender.send(mimeMessage);
     }
 
-    public void sendVerificationEmail(String to, String verificationLink) throws MessagingException {
+    public void sendVerificationEmail(String to, String verificationLink) throws MessagingException, UnsupportedEncodingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
+        helper.setFrom("noreply.finflow@gmail.com", "FinFlow Support");
         helper.setTo(to);
         helper.setSubject("Verify your FinFlow account");
 
