@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
 //            http://localhost:8080
 //            https://finflow-backend-g9mo.onrender.com
 
-            String verificationLink = "http://localhost:5173/verifyEmail?token=" + token;
+            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verifyEmail?token=" + token;
             mailService.sendVerificationEmail(user.getEmail(), verificationLink);
 
             generalDto.setStatus(true);
@@ -157,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
         // http://localhost:5173
         try {
             String token = jwtUtil.generateResetToken(email);
-            String resetLink = "http://localhost:5173/reset-password?token=" + token;
+            String resetLink = "https://finflow-backend-g9mo.onrender.com/reset-password?token=" + token;
 
             mailService.sendResetPasswordEmail(email, resetLink);
         } catch (Exception e) {
