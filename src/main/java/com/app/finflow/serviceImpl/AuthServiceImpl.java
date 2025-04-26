@@ -72,8 +72,7 @@ public class AuthServiceImpl implements AuthService {
 
             userRepository.save(user);
 
-            //https://finflow-tracker.netlify.app
-            String verificationLink = "http://localhost:5173/verifyEmail?token=" + token;
+            String verificationLink = "https://finflow-tracker.netlify.app/verifyEmail?token=" + token;
             mailService.sendVerificationEmail(user.getEmail(), "Verify Your Account",
                     "Click the link to verify: " + verificationLink);
 
