@@ -68,11 +68,12 @@ public class AuthServiceImpl implements AuthService {
             user.setVerificationToken(token);
             user.setTokenExpiry(LocalDateTime.now().plusMinutes(5)); // 30 minutes
             user.setVerified(false);
-
-
             userRepository.save(user);
 
-            String verificationLink = "https://finflow-tracker.netlify.app/verifyEmail?token=" + token;
+//            http://localhost:8080
+//            https://finflow-backend-g9mo.onrender.com
+
+            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verifyEmail?token=" + token;
             mailService.sendVerificationEmail(user.getEmail(), "Verify Your Account",
                     "Click the link to verify: " + verificationLink);
 
@@ -80,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
             generalDto.setMessage("User registered successfully. Please check your email to verify your account.");
         } catch (Exception e) {
             generalDto.setStatus(false);
-            generalDto.setMessage("Error during user registration");
+            generalDto.setMessage("Error during user registration.");
         }
         return generalDto;
     }
@@ -117,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepository.getUserByEmail(request.getEmail());
 
             if (null == user) {
-                throw new RuntimeException("Email not registered");
+                throw new RuntimeException("Email not registered.");
             }
 
             if (!user.isVerified()) {
@@ -132,7 +133,7 @@ public class AuthServiceImpl implements AuthService {
                         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
                 );
             } catch (Exception e) {
-                throw new RuntimeException("Invalid username or password");
+                throw new RuntimeException("Invalid username or password.");
             }
 
 
@@ -142,21 +143,28 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public GeneralDto requestReset(String email) {
+    public GeneralDto sendResetMail(String email) {
         GeneralDto response = new GeneralDto();
+        response.setStatus(true);
+        response.setMessage("The mail to reset your password has been sent successfully.");
 
-       userRepository.findByEmail(email)
-                .map(user -> {
-                    String token = jwtUtil.generateResetToken(email);
-                    String resetLink = "https://finflow-tracker.netlify.app/reset-password?token=" + token;
+       User user = userRepository.getUserByEmail(email);
+       if(null == user){
+           response.setStatus(false);
+           response.setMessage("Email not registered");
+           return response;
+       }
 
-                    mailService.sendResetPasswordEmail(email, resetLink); // ✅
+        // http://localhost:5173
+        try {
+            String token = jwtUtil.generateResetToken(email);
+            String resetLink = "https://finflow-backend-g9mo.onrender.com/reset-password?token=" + token;
 
-                    return ResponseEntity.ok("Reset link sent to " + email);
-                })
-                .orElseGet(() -> ResponseEntity.status(404).body("Email not registered"));
-
-       return response;
+            mailService.sendResetPasswordEmail(email, resetLink);
+        } catch (Exception e) {
+            response.setMessage("Error in sending reset password mail to "+ email + ".");
+        }
+        return response;
     }
 
     @Override
@@ -165,7 +173,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (!jwtUtil.validateResetToken(token)) {
             response.setStatus(false);
-            response.setMessage("Invalid or expired token");
+            response.setMessage("Invalid or expired token.");
             return response;
         }
 
@@ -175,12 +183,12 @@ public class AuthServiceImpl implements AuthService {
                     user.setPassword(passwordEncoder.encode(newPassword));
                     userRepository.save(user);
                     response.setStatus(true);
-                    response.setMessage("Password updated successfully");
+                    response.setMessage("Password updated successfully.");
                     return response;
                 })
                 .orElseGet(() -> {
                     response.setStatus(false);
-                    response.setMessage("Email not registered");
+                    response.setMessage("Email not registered.");
                     return response;
                 });
 
@@ -192,19 +200,19 @@ public class AuthServiceImpl implements AuthService {
     public GeneralDto verifyUser(String token) {
         GeneralDto response = new GeneralDto();
         response.setStatus(true);
-        response.setMessage("Account verified successfully");
+        response.setMessage("Account verified successfully.");
 
         Optional<User> optionalUser = userRepository.findByVerificationToken(token);
         if (optionalUser.isEmpty()) {
             response.setStatus(false);
-            response.setMessage("Invalid token");
+            response.setMessage("Invalid token.");
             return response;
         }
 
         User user = optionalUser.get();
         if (user.getTokenExpiry().isBefore(LocalDateTime.now())){
             response.setStatus(false);
-            response.setMessage("Token expired");
+            response.setMessage("Token expired.");
             return response;
         }
 

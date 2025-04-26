@@ -41,9 +41,10 @@ public class AuthController {
         return authService.login(request);
     }
 
+    // Send reset password mail
     @PostMapping("/request-password-reset")
-    public ResponseEntity<GeneralDto> requestReset(@RequestParam String email) {
-        return ResponseEntity.ok(authService.requestReset(email));
+    public ResponseEntity<GeneralDto> sendResetMail(@RequestParam String email) {
+        return ResponseEntity.ok(authService.sendResetMail(email));
     }
 
     @PostMapping("/reset-password")
