@@ -31,5 +31,9 @@ public class Expense {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "payment_mode_id")
+    private PaymentMode paymentMode;
+
     private Boolean deleted;
 }

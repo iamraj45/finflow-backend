@@ -22,9 +22,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer>, Pagi
     List<Expense> getExpenseById(@Param("expenseIds") List<Integer> expenseId);
 
     @Query("SELECT e FROM Expense e WHERE e.user.id = :userId AND e.deleted = false AND e.date BETWEEN :startDate AND :endDate" +
-            " AND (:categoryId IS NULL OR e.category.id = :categoryId) ORDER BY e.date DESC")
+            " AND (:categoryId IS NULL OR e.category.id = :categoryId)" + " AND (:paymentModeId IS NULL OR e.paymentMode.id = :paymentModeId)  ORDER BY e.date DESC")
     Page<Expense> findAllByUserIdAndStartDateAndEndDate(@Param("userId") Integer userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate,
-                                                        @Param("categoryId") Integer categoryId, Pageable pageable);
+                                                        @Param("categoryId") Integer categoryId, @Param("paymentModeId") Integer paymentModeId, Pageable pageable);
 
     @Query("SELECT e FROM Expense e WHERE e.user.id = :userId AND e.deleted = false AND e.date BETWEEN :startDate AND :endDate ORDER BY e.date DESC")
     List<Expense> findAllByUserIdAndStartDateAndEndDateWithoutPagination(@Param("userId") Integer userId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);

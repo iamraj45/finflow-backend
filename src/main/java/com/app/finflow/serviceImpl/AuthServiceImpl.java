@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
 //            http://localhost:5173
 //            https://finflow-backend-g9mo.onrender.com
 
-            String verificationLink = "https://finflow-backend-g9mo.onrender.com/verify-email?token=" + token;
+            String verificationLink = "http://localhost:5173/verify-email?token=" + token;
             mailService.sendVerificationEmail(user.getEmail(), verificationLink);
 
             generalDto.setStatus(true);
@@ -147,17 +147,17 @@ public class AuthServiceImpl implements AuthService {
         response.setStatus(true);
         response.setMessage("The mail to reset your password has been sent successfully.");
 
-       User user = userRepository.getUserByEmail(email);
-       if(null == user){
-           response.setStatus(false);
-           response.setMessage("Email not registered");
-           return response;
-       }
+        User user = userRepository.getUserByEmail(email);
+        if(null == user){
+            response.setStatus(false);
+            response.setMessage("Email not registered");
+            return response;
+        }
 
         // http://localhost:5173
         try {
             String token = jwtUtil.generateResetToken(email);
-            String resetLink = "https://finflow-backend-g9mo.onrender.com/reset-password?token=" + token;
+            String resetLink = "http://localhost:5173/reset-password?token=" + token;
 
             mailService.sendResetPasswordEmail(email, resetLink);
         } catch (Exception e) {
@@ -222,5 +222,4 @@ public class AuthServiceImpl implements AuthService {
 
         return response;
     }
-
 }

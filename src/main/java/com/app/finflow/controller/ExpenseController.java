@@ -25,9 +25,9 @@ public class ExpenseController {
 
     @GetMapping("/getExpenses")
     public ResponseEntity<List<ExpenseDto>> getExpenses(@RequestParam("userId") Integer userId, @RequestParam("startDate") Long startDate, @RequestParam("endDate") Long endDate,
-                                                        @RequestParam(value = "categoryId", required = false) Integer categoryId, @RequestParam(value = "pageNo", required = false)Integer pageNo,
+                                                        @RequestParam(value = "categoryId", required = false) Integer categoryId, @RequestParam(value = "paymentModeId", required = false) Integer paymentModeId, @RequestParam(value = "pageNo", required = false)Integer pageNo,
                                                         @RequestParam(value = "pageSize", required = false)Integer pageSize) throws IllegalArgumentException {
-        return ResponseEntity.ok(expenseService.getExpenses(userId, startDate, endDate, categoryId, pageNo, pageSize));
+        return ResponseEntity.ok(expenseService.getExpenses(userId, startDate, endDate, categoryId, paymentModeId, pageNo, pageSize));
     }
 
     @PostMapping("/deleteExpense")

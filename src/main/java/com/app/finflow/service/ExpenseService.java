@@ -9,7 +9,7 @@ public interface ExpenseService {
 
     GeneralDto addExpense(ExpenseDto request);
 
-    List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate, Integer categoryId, Integer pageNo, Integer pageSize) throws IllegalArgumentException;
+    List<ExpenseDto> getExpenses(Integer userId, Long startDate, Long endDate, Integer categoryId, Integer paymentModeId, Integer pageNo, Integer pageSize) throws IllegalArgumentException;
 
     GeneralDto deleteExpense(List<Integer> expenseId);
 
